@@ -1,0 +1,463 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import javax.imageio.ImageIO;
+import javax.swing.table.DefaultTableModel;
+
+
+public class UGES_GUI {
+
+    private static final String USERNAME = "a";
+    private static final String PASSWORD = "aa";
+
+    private static DefaultTableModel tableModel = new DefaultTableModel(new Object[]{"Student Name", "Student No.", "Final Semestral Grade"}, 0);
+   
+    public static void main(String[] args) {
+        
+    	JFrame frame = new JFrame("University Grade Encoding System"); // Create a JFrame for the system
+    	JFrame.setDefaultLookAndFeelDecorated(true); // Set default look and feel
+    	frame.setSize(1050, 630); // Set the size of the frame
+    	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Exit the application on close
+    	frame.setLayout(null); // Use null layout for absolute positioning
+    	frame.getContentPane().setBackground(Color.decode("#41489f")); // Set background color
+
+    	JPanel titleBar = new JPanel(); // Create a title bar panel
+    	titleBar.setBackground(Color.BLACK); // Set title bar color to black
+    	titleBar.setBounds(0, 0, 1050, 20); // Set title bar position and size
+    	titleBar.setLayout(null); // Use null layout for absolute positioning
+
+    	JLabel titleLabel = new JLabel(""); // Create a label for the title
+    	titleLabel.setForeground(Color.WHITE); // Set text color to white
+    	titleLabel.setFont(new Font("Arial", Font.BOLD, 18)); // Set font style and size
+    	titleLabel.setBounds(20, 10, 400, 30); // Set position and size of the title label
+    	titleBar.add(titleLabel); // Add title label to the title bar
+    	frame.add(titleBar); // Add title bar to the frame
+
+    	JPanel panel = new JPanel(); // Create a login panel
+    	panel.setBackground(Color.decode("#101238")); // Set background color
+    	panel.setBounds(30, 100, 400, 450); // Set position and size of the panel
+    	panel.setLayout(null); // Use null layout for absolute positioning
+
+    	JLabel messageLabel = new JLabel("Login to system"); // Create login message label
+    	messageLabel.setForeground(Color.WHITE); // Set text color to white
+    	messageLabel.setFont(new Font("Arial", Font.BOLD, 26)); // Set font style and size
+    	messageLabel.setBounds(50, 50, 250, 30); // Set position and size of the message label
+    	panel.add(messageLabel); // Add message label to the panel
+
+    	JLabel additionalMessageLabel = new JLabel("Please enter your username and password below"); // Create additional message label
+    	additionalMessageLabel.setForeground(Color.WHITE); // Set text color to white
+    	additionalMessageLabel.setFont(new Font("Arial", Font.PLAIN, 13)); // Set font style and size
+    	additionalMessageLabel.setBounds(50, 90, 350, 30); // Set position and size of additional message label
+    	panel.add(additionalMessageLabel); // Add additional message label to the panel
+
+    	JTextField usernameField = new JTextField("Username"); // Create username input field
+    	usernameField.setBounds(50, 180, 300, 20); // Set position and size
+    	usernameField.setForeground(Color.GRAY); // Set text color to gray
+    	usernameField.setBorder(BorderFactory.createEmptyBorder()); // Remove border
+    	usernameField.setBackground(Color.decode("#101238")); // Set background color
+    	usernameField.setCaretColor(Color.WHITE); // Set caret color to white
+    	panel.add(usernameField); // Add username field to the panel
+
+    	JPanel usernameLine = new JPanel(); // Create a panel for the username line
+    	usernameLine.setBackground(Color.WHITE); // Set the background color to white
+    	usernameLine.setBounds(50, 200, 300, 1); // Set position and size of the line
+    	panel.add(usernameLine); // Add the line to the panel
+
+    	// Add focus listener to the username field
+    	usernameField.addFocusListener(new FocusAdapter() {
+    	    @Override
+    	    public void focusGained(FocusEvent e) { // When the username field gains focus
+    	        if (usernameField.getText().equals("Username")) { // Check if it shows placeholder text
+    	            usernameField.setText(""); // Clear the text
+    	            usernameField.setForeground(Color.WHITE); // Change text color to white
+    	        }
+    	    }
+
+    	    @Override
+    	    public void focusLost(FocusEvent e) { // When the username field loses focus
+    	        if (usernameField.getText().isEmpty()) { // Check if the field is empty
+    	            usernameField.setText("Username"); // Reset placeholder text
+    	            usernameField.setForeground(Color.GRAY); // Change text color to gray
+    	        }
+    	    }
+    	});
+
+    	// Create password field
+    	JPasswordField passwordField = new JPasswordField("Password"); // Initialize with placeholder text
+    	passwordField.setBounds(50, 230, 300, 20); // Set position and size
+    	passwordField.setForeground(Color.GRAY); // Set text color to gray
+    	passwordField.setBorder(BorderFactory.createEmptyBorder()); // Remove border
+    	passwordField.setBackground(Color.decode("#101238")); // Set background color
+    	passwordField.setCaretColor(Color.WHITE); // Set caret color to white
+    	panel.add(passwordField); // Add password field to the panel
+
+    	JPanel passwordLine = new JPanel(); // Create a panel for the password line
+    	passwordLine.setBackground(Color.WHITE); // Set the background color to white
+    	passwordLine.setBounds(50, 250, 300, 1); // Set position and size of the line
+    	panel.add(passwordLine); // Add the line to the panel
+
+    	// Add focus listener to the password field
+    	passwordField.addFocusListener(new FocusAdapter() {
+    	    @Override
+    	    public void focusGained(FocusEvent e) { // When the password field gains focus
+    	        if (new String(passwordField.getPassword()).equals("Password")) { // Check if it shows placeholder text
+    	            passwordField.setEchoChar((char) 0); // Show text as plain
+    	            passwordField.setText(""); // Clear the text
+    	            passwordField.setForeground(Color.WHITE); // Change text color to white
+    	        }
+    	    }
+
+    	    @Override
+    	    public void focusLost(FocusEvent e) { // When the password field loses focus
+    	        if (new String(passwordField.getPassword()).isEmpty()) { // Check if the field is empty
+    	            passwordField.setEchoChar('\u2022'); // Set echo character back to bullet
+    	            passwordField.setText("Password"); // Reset placeholder text
+    	            passwordField.setForeground(Color.GRAY); // Change text color to gray
+    	        }
+    	    }
+    	});
+
+    	// Create checkbox for showing password
+    	JCheckBox showPasswordCheckBox = new JCheckBox("Show Password"); // Initialize checkbox
+    	showPasswordCheckBox.setBounds(50, 270, 150, 20); // Set position and size
+    	showPasswordCheckBox.setBackground(Color.decode("#101238")); // Set background color
+    	showPasswordCheckBox.setForeground(Color.WHITE); // Set text color to white
+    	panel.add(showPasswordCheckBox); // Add checkbox to the panel
+
+    	// Add action listener to the checkbox
+    	showPasswordCheckBox.addActionListener(e -> {
+    	    if (showPasswordCheckBox.isSelected()) { // If checkbox is selected
+    	        passwordField.setEchoChar((char) 0); // Show password as plain text
+    	    } else {
+    	        passwordField.setEchoChar('\u2022'); // Otherwise, show as bullet
+    	    }
+    	});
+
+    	// Create login button
+    	JButton loginButton = new JButton("Login"); // Initialize button
+    	loginButton.setBounds(140, 350, 100, 20); // Set position and size
+    	panel.add(loginButton); // Add button to the panel
+
+    	// Add action listener for the login button
+    	loginButton.addActionListener(e -> {
+    	    String enteredUsername = usernameField.getText(); // Get entered username
+    	    String enteredPassword = new String(passwordField.getPassword()); // Get entered password
+    	    // Check if entered credentials match predefined constants
+    	    if (enteredUsername.equals(USERNAME) && enteredPassword.equals(PASSWORD)) {
+    	        frame.dispose(); // Close the login frame
+    	        showNewWindow(); // Show the new window
+    	    } else {
+    	        // Show error message if login fails
+    	        JOptionPane.showMessageDialog(frame, "Login Failed. Please check your username and password.", "Error", JOptionPane.ERROR_MESSAGE);
+    	    }
+    	});
+
+    	// Create a new panel with a background image
+    	JPanel panel2 = new JPanel() {
+    	    private static final long serialVersionUID = 1L; // Serial version for serialization
+    	    private BufferedImage backgroundImage; // Variable for background image
+
+    	    {
+    	        try {
+    	            // Load the background image from the specified file path
+    	            backgroundImage = ImageIO.read(new File("C:\\Users\\JAYGAB\\Desktop\\backgroundloginn.jpg"));
+    	        } catch (Exception e) {
+    	            e.printStackTrace(); // Print stack trace if there's an error
+    	        }
+    	    }
+
+    	    @Override
+    	    protected void paintComponent(Graphics g) { // Override method to paint component
+    	        super.paintComponent(g); // Call superclass method
+    	        if (backgroundImage != null) { // Check if the image is loaded
+    	            // Draw the background image
+    	            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), null);
+    	        }
+    	    }
+    	};
+
+    	panel2.setBounds(430, 100, 550, 450); // Set position and size of the panel
+    	panel2.setLayout(null); // Set layout to null
+    	frame.add(panel); // Add the first panel to the frame
+    	frame.add(panel2); // Add the second panel to the frame
+    	frame.setVisible(true); // Make the frame visible
+    	}
+
+    	// Method to show the new window after successful login
+    	private static void showNewWindow() {
+    	    JFrame newFrame = new JFrame("University Grade Encoding System"); // Create new frame
+    	    newFrame.setSize(1200, 630); // Set size of the frame
+    	    newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Close operation
+    	    newFrame.setLayout(null); // Set layout to null
+    	    newFrame.getContentPane().setBackground(Color.decode("#41489f")); // Set background color
+
+    	    JPanel newTitleBar = new JPanel(); // Create title bar panel
+    	    newTitleBar.setBackground(Color.BLACK); // Set background color to black
+    	    newTitleBar.setBounds(0, 0, 1050, 20); // Set position and size
+    	    newTitleBar.setLayout(null); // Set layout to null
+
+    	    JLabel newTitleLabel = new JLabel(""); // Create a label for the title
+    	    newTitleLabel.setForeground(Color.WHITE); // Set text color to white
+    	    newTitleLabel.setFont(new Font("Arial", Font.BOLD, 18)); // Set font style
+    	    newTitleLabel.setBounds(20, 10, 400, 30); // Set position and size
+    	    newTitleBar.add(newTitleLabel); // Add title label to the title bar
+    	    newFrame.add(newTitleBar); // Add title bar to the new frame
+
+    	    JPanel newPanel = new JPanel(); // Create new panel for the welcome message
+    	    newPanel.setBackground(Color.decode("#101238")); // Set background color
+    	    newPanel.setBounds(0, 0, 1200, 100); // Set position and size
+    	    newPanel.setLayout(null); // Set layout to null
+
+    	    JLabel welcomeLabel = new JLabel("Welcome to our University Grade Encoding System"); // Create welcome label
+    	    welcomeLabel.setForeground(Color.WHITE); // Set text color to white
+    	    welcomeLabel.setFont(new Font("Arial", Font.BOLD, 26)); // Set font style
+    	    welcomeLabel.setBounds(300, 0, 1050, 100); // Set position and size
+    	    newPanel.add(welcomeLabel); // Add welcome label to the panel
+
+    	    newFrame.add(newPanel); // Add the welcome panel to the new frame
+
+    	    JPanel newPanel2 = new JPanel(); // Create a side panel for buttons
+    	    newPanel2.setBackground(Color.decode("#101238")); // Set background color
+    	    newPanel2.setBounds(0, 0, 150, 650); // Set position and size
+    	    newPanel2.setLayout(null); // Set layout to null
+
+    	    JButton encodeGradeButton = new JButton("Encode Grade"); // Create button for encoding grades
+    	    encodeGradeButton.setBounds(10, 150, 130, 30); // Set position and size
+    	    newPanel2.add(encodeGradeButton); // Add button to the panel
+
+    	    JButton gradingSystemButton = new JButton("Grading System"); // Create button for grading system
+    	    gradingSystemButton.setBounds(10, 250, 130, 30); // Set position and size
+    	    newPanel2.add(gradingSystemButton); // Add button to the panel
+
+    	    JButton aboutUsButton = new JButton("About Us"); // Create button for About Us
+    	    aboutUsButton.setBounds(10, 350, 130, 30); // Set position and size
+    	    newPanel2.add(aboutUsButton); // Add button to the panel
+
+    	    JButton logoutButton = new JButton("Logout"); // Create button for logout
+    	    logoutButton.setBounds(10, 450, 130, 30); // Set position and size
+    	    newPanel2.add(logoutButton); // Add button to the panel
+
+    	    // Add action listener for logout button
+    	    logoutButton.addActionListener(e -> {
+    	        newFrame.dispose(); // Close the new frame
+    	        showLoginWindow(); // Show the login window again
+    	    });
+
+    	    // Add action listener for the "About Us" button
+    	    aboutUsButton.addActionListener(e -> showAboutUsWindow()); // Show About Us window
+
+    	    // Add action listener for the "Grading System" button
+    	    gradingSystemButton.addActionListener(e -> showGradingSystemWindow()); // Show grading system window
+
+    	    newFrame.add(newPanel2); // Add side panel to the new frame
+    	    newFrame.setVisible(true); // Make the new frame visible
+
+    	    JPanel newPanel3 = new JPanel(); // Create another panel
+    	    newPanel3.setBackground(Color.decode("#101238")); // Set background color
+    	    newPanel3.setBounds(160, 110, 450, 150); // Set position and size
+    	    newPanel3.setLayout(null); // Set layout to null
+
+     
+        // Create the label for "Student Information"
+        JLabel studentInfoLabel = new JLabel("Student Information");
+        studentInfoLabel.setForeground(Color.WHITE); // Set text color to white
+        studentInfoLabel.setFont(new Font("Arial", Font.BOLD, 16)); // Set font to bold
+        studentInfoLabel.setBounds(20, 10, 200, 30); // Set position and size within the panel
+
+        // Add the label to newPanel3
+        newPanel3.add(studentInfoLabel);
+        
+        // Create a label and text field for "Student Name"
+        JLabel studentNameLabel = new JLabel("Student Name:");
+        studentNameLabel.setForeground(Color.WHITE);
+        studentNameLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        studentNameLabel.setBounds(20, 60, 100, 20);
+        newPanel3.add(studentNameLabel);
+
+        JTextField studentNameField = new JTextField();
+        studentNameField.setBounds(150, 60, 250, 20);
+        studentNameField.setForeground(Color.BLACK);
+        studentNameField.setBorder(BorderFactory.createEmptyBorder());
+        newPanel3.add(studentNameField);
+
+        // Create a label and text field for "Student Number"
+        JLabel studentNumberLabel = new JLabel("Student Number:");
+        studentNumberLabel.setForeground(Color.WHITE);
+        studentNumberLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        studentNumberLabel.setBounds(20, 100, 120, 20);
+        newPanel3.add(studentNumberLabel);
+
+        JTextField studentNumberField = new JTextField();
+        studentNumberField.setBounds(150, 100, 250, 20);
+        studentNumberField.setForeground(Color.BLACK);
+        studentNumberField.setBorder(BorderFactory.createEmptyBorder());
+        newPanel3.add(studentNumberField);
+
+        // Add the panel to the new frame
+        newFrame.add(newPanel3);   
+        
+        JPanel newPanel4 = new JPanel();
+        newPanel4.setBackground(Color.decode("#101238"));
+        newPanel4.setBounds(160, 272, 450, 320);
+        newPanel4.setLayout(null); // Set layout to null for manual positioning
+
+        // Create the label for "Student Final Semestral Grade"
+        JLabel finalGradeLabel = new JLabel("Student Final Semestral Grade");
+        finalGradeLabel.setForeground(Color.WHITE); // Set text color to white
+        finalGradeLabel.setFont(new Font("Arial", Font.BOLD, 16)); // Set font to bold
+        finalGradeLabel.setBounds(20, 10, 300, 30); // Set position and size within the panel
+        newPanel4.add(finalGradeLabel);
+
+        // Course labels and fields
+        String[] courses = {"SOC101", "ENT101", "STS101", "ETH101", "PED103", "RIZ101", "CPP106", "CPA101", "COE108"};
+        JTextField[] gradeFields = new JTextField[courses.length];
+
+        for (int i = 0; i < courses.length; i++) {
+            JLabel courseLabel = new JLabel(courses[i] + ":");
+            courseLabel.setForeground(Color.WHITE); // Set text color to white
+            courseLabel.setFont(new Font("Arial", Font.PLAIN, 12)); // Set font to plain
+            courseLabel.setBounds(20, 50 + (i * 30), 100, 20); // Position the label
+
+            newPanel4.add(courseLabel);
+
+            gradeFields[i] = new JTextField();
+            gradeFields[i].setBounds(120, 50 + (i * 30), 100, 20); // Position the text field
+            newPanel4.add(gradeFields[i]); // Add the text field for each course
+        }
+
+        // Add the panel to the new frame
+        newFrame.add(newPanel4);
+        
+        JPanel newPanel5 = new JPanel();
+        newPanel5.setBackground(Color.decode("#101238"));
+        newPanel5.setBounds(620, 110, 560, 470);
+        newPanel5.setLayout(null);
+
+        // Create the table with the data and column names
+        JTable table = new JTable(tableModel);
+
+        // Set up the table model to make it scrollable
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBounds(10, 10, 540, 450); // Set position and size for the scroll pane
+
+        // Add the scroll pane to newPanel5
+        newPanel5.add(scrollPane);
+
+        // Add the panel to the new frame
+        newFrame.add(newPanel5);
+        
+     // Action listener for the Encode Grade button
+        encodeGradeButton.addActionListener(e -> {
+            String studentName = studentNameField.getText();
+            String studentNumber = studentNumberField.getText();
+
+            // Collect grades
+            double total = 0;
+            int count = 0;
+            for (JTextField gradeField : gradeFields) {
+                String text = gradeField.getText();
+                if (!text.isEmpty()) {
+                    try {
+                        double grade = Double.parseDouble(text);
+                        total += grade;
+                        count++;
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(newFrame, "Invalid grade entered for one of the courses.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+            }
+
+            // Calculate final semestral grade
+            double finalGrade = count > 0 ? total / count : 0;
+
+            // Add data to the table
+            if (!studentName.isEmpty() && !studentNumber.isEmpty()) {
+                tableModel.addRow(new Object[]{studentName, studentNumber, finalGrade});
+            } else {
+                JOptionPane.showMessageDialog(newFrame, "Please enter both Student Name and Student Number.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+    }
+
+    private static void showGradingSystemWindow() {
+        JFrame gradingFrame = new JFrame("Grading System");
+        gradingFrame.setSize(700, 400);
+        gradingFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        gradingFrame.setLayout(new BorderLayout());
+
+        // Set the background color for the gradingFrame
+        gradingFrame.getContentPane().setBackground(Color.decode("#101238"));
+
+        // Title label
+        JLabel titleLabel = new JLabel("<html><h2 style='color: white;'>Grading System</h2></html>", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        gradingFrame.add(titleLabel, BorderLayout.NORTH);
+
+        // Text area to display grading information
+        JTextArea gradingInfoTextArea = new JTextArea();
+        gradingInfoTextArea.setText("Grading System:\n"
+                + "----------------------------------\n"
+        		+ "Grade Range				Equivalent		Remarks\n"
+                + " 100 - 96 		   	   	   1.00 	   	Passed\n"
+                + "  95-92			  	   1.25  		Passed\n"
+                + "  91-88 				   1.50 		Passed\n"
+                + "  87-84 				   1.75 		Passed\n"
+                + "  83-80 				   2.00		Passed\n"
+                + "  79-75 				   2.25 		Passed\n"
+                + "  74-70 				   2.50 		Passed\n"
+                + "  69-65 				   2.75 		Passed\n"
+                + "  64-60 				   3.00 		Passed\n"
+                + "  59-0 				   5.00 		Passed\n"
+                + "----------------------------------\n");
+        
+        gradingInfoTextArea.setFont(new Font("Arial", Font.PLAIN, 14));
+        gradingInfoTextArea.setEditable(false);
+        gradingInfoTextArea.setBackground(Color.decode("#101238"));
+        gradingInfoTextArea.setForeground(Color.WHITE); // Set the font color to white
+
+        // Adding the text area to the frame
+        gradingFrame.add(gradingInfoTextArea, BorderLayout.CENTER);
+
+        gradingFrame.setVisible(true);
+    }
+
+    private static void showAboutUsWindow() {
+        JFrame aboutFrame = new JFrame("About Us");
+        aboutFrame.setSize(800, 400);
+        aboutFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        aboutFrame.setLayout(new BorderLayout());
+
+        // Set the background color for the aboutFrame
+        aboutFrame.getContentPane().setBackground(Color.decode("#101238"));
+
+        // Introduction label
+        JLabel introLabel = new JLabel("<html><h2 style='color: white;'>About the University Grade Encoding System</h2>"
+                + "<p style='color: white;'>This system allows users to encode grades for students efficiently. "
+                + "Follow the tutorial below to understand how to use the system.</p></html>", SwingConstants.CENTER);
+        introLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        aboutFrame.add(introLabel, BorderLayout.NORTH);
+
+        // Tutorial text area
+        JTextArea tutorialTextArea = new JTextArea();
+        tutorialTextArea.setText("\nEncode Grades: You can input student info along with their grades then press the encode grade button to add it to the table.\n"
+                + "\nGrading System: It shows the grading system of our university, displaying the required grades to pass a subject.\n"
+                + "\nAbout Us: Learn a little introduction about our system and what it provides.\n"
+                + "\nLogout: Use the logout button to exit the system safely.");
+        
+        tutorialTextArea.setFont(new Font("Arial", Font.PLAIN, 14));
+        tutorialTextArea.setEditable(false);
+        tutorialTextArea.setBackground(Color.decode("#101238"));
+        tutorialTextArea.setForeground(Color.WHITE); // Set the font color to white
+        aboutFrame.add(tutorialTextArea, BorderLayout.CENTER);
+
+        aboutFrame.setVisible(true);
+    }
+
+    private static void showLoginWindow() {
+        main(null);
+    }
+}
